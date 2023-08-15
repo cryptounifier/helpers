@@ -4,7 +4,7 @@ namespace CryptoUnifier\Helpers;
 
 use Illuminate\Support\ServiceProvider;
 
-class JetstreamPlusServiceProvider extends ServiceProvider
+class CryptoUnifierHelpersServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.

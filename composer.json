@@ -1,0 +1,30 @@
+{
+    "name": "cryptounifier/helpers",
+    "description": "Some extra classes for internal usage of Crypto Unifier products.",
+    "keywords": ["laravel"],
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "cryptounifier",
+            "email": "contact@cryptounifier.io"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "illuminate/support": "^10.0",
+        "jenssegers/agent": "^2.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "CryptoUnifier\\Helpers\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "CryptoUnifier\\Helpers\\CryptoUnifierHelpersServiceProvider"
+            ]
+        }
+    }
+}

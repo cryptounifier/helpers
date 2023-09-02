@@ -4,7 +4,7 @@ namespace CryptoUnifier\Helpers;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Client\RequestException;
 
@@ -19,7 +19,6 @@ class CoinGecko
      * CoinGecko API base URL.
      */
     public const API_URL = 'https://api.coingecko.com/api/v3';
-
 
     /**
      * Flush cache asset information (If available).
@@ -107,11 +106,14 @@ class CoinGecko
     /**
      * Append error log to storage.
      */
-    protected static function addErrorLog(string $apiId, string $message): bool
+    protected static function addErrorLog(string $apiId, string $message): void
     {
-        return Storage::append(
-            path: 'coingecko-error.log',
-            data: '[' . now()->toDateTimeString() . '] API ID: ' . $apiId . ' - ' . $message . '.'
+        Log::warning(
+            'CoinGecko failed to fetch asset information with ID "{id}" and responded the following message "{message}".', 
+            [
+                'id' => $apiId,
+                'message' => $message,
+            ]
         );
     }
 }

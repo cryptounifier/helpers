@@ -43,9 +43,9 @@ class CaptchaValidator
         $captcha = (object) Http::asForm()->post('https://hcaptcha.com/siteverify', [
             'secret'   => $this->secretKey,
             'response' => $token,
-        ])->json();
+        ])->throw()->json();
 
-        return optional($captcha)->success;
+        return optional($captcha)->success === true;
     }
 
     /**
@@ -56,9 +56,9 @@ class CaptchaValidator
         $captcha = (object) Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
             'secret'   => $this->secretKey,
             'response' => $token,
-        ])->json();
+        ])->throw()->json();
 
-        return optional($captcha)->success;
+        return optional($captcha)->success === true;
     }
 
     /**
@@ -69,9 +69,9 @@ class CaptchaValidator
         $captcha = (object) Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
             'secret'   => $this->secretKey,
             'response' => $token,
-        ])->json();
+        ])->throw()->json();
 
-        return optional($captcha)->success;
+        return optional($captcha)->success === true;
     }
 
     /**
@@ -94,7 +94,7 @@ class CaptchaValidator
             'gen_time'  => $token[3],
             'sign_token' => $signToken,
             'captcha_id' => $this->siteKey,
-        ])->json();
+        ])->throw()->json();
 
         return optional($captcha)->result === 'success';
     }

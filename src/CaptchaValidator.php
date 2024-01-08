@@ -24,13 +24,13 @@ class CaptchaValidator
     /**
      * Validate captcha token response.
      */
-    public function validate(string $token, string $ipAddress): bool
+    public function validate(string $token, string $ipAddress, ?string $action = null): bool
     {
         return match ($this->driver) {
             'hcaptcha' => $this->validateHcaptcha($token),
             'recaptcha' => $this->validateReCaptcha($token),
             'geetest' => $this->validateGeeTest($token),
-            'turnstile' => $this->validateTurnstile($token, $ipAddress),
+            'turnstile' => $this->validateTurnstile($token, $ipAddress, $action),
             default => false,
         };
     }
@@ -38,7 +38,7 @@ class CaptchaValidator
     /**
      * Validate using Turnstile driver.
      */
-    protected function validateTurnstile(string $token, string $ipAddress): bool
+    protected function validateTurnstile(string $token, string $ipAddress, ?string $action): bool
     {
         $captcha = (object) Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
             'secret'            => $this->secretKey,
@@ -47,7 +47,15 @@ class CaptchaValidator
             'remoteip_leniency' => 'strict', // Un-documented beta feature
         ])->throw()->json();
 
-        return optional($captcha)->success === true;
+        if (optional($captcha)->success !== true) {
+            return false;
+        }
+
+        if ($action !== null && optional($captcha)->action !== $action) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

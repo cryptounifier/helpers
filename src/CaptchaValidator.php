@@ -24,15 +24,30 @@ class CaptchaValidator
     /**
      * Validate captcha token response.
      */
-    public function validate(string $token): bool
+    public function validate(string $token, string $ipAddress): bool
     {
         return match ($this->driver) {
             'hcaptcha' => $this->validateHcaptcha($token),
             'recaptcha' => $this->validateReCaptcha($token),
             'geetest' => $this->validateGeeTest($token),
-            'turnstile' => $this->validateTurnstile($token),
+            'turnstile' => $this->validateTurnstile($token, $ipAddress),
             default => false,
         };
+    }
+
+    /**
+     * Validate using Turnstile driver.
+     */
+    protected function validateTurnstile(string $token, string $ipAddress): bool
+    {
+        $captcha = (object) Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+            'secret'            => $this->secretKey,
+            'response'          => $token,
+            'remoteip'          => $ipAddress,
+            'remoteip_leniency' => 'strict', // Un-documented beta feature
+        ])->throw()->json();
+
+        return optional($captcha)->success === true;
     }
 
     /**
@@ -54,19 +69,6 @@ class CaptchaValidator
     protected function validateReCaptcha(string $token): bool
     {
         $captcha = (object) Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret'   => $this->secretKey,
-            'response' => $token,
-        ])->throw()->json();
-
-        return optional($captcha)->success === true;
-    }
-
-    /**
-     * Validate using Turnstile driver.
-     */
-    protected function validateTurnstile(string $token): bool
-    {
-        $captcha = (object) Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
             'secret'   => $this->secretKey,
             'response' => $token,
         ])->throw()->json();

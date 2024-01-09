@@ -42,11 +42,11 @@ trait ExtraAgentFeatures
 
     public function deviceType(): int
     {
-        if ($this->agent->isMobile()) {
+        if ($this->isMobile()) {
             return self::DEVICE_TYPE_MOBILE;
         }
 
-        if ($this->agent->isTablet()) {
+        if ($this->isTablet()) {
             return self::DEVICE_TYPE_TABLET;
         }
 

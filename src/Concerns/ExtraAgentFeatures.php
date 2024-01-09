@@ -8,14 +8,20 @@ trait ExtraAgentFeatures
     public const DEVICE_TYPE_MOBILE = 2;
     public const DEVICE_TYPE_TABLET = 3;
 
-    public static function currentRequest(): self
+    public static function currentRequest(): static
     {
-        return (new static())->setUserAgent((string) optional(request())->header('User-Agent'));
+        $instance = new static();
+        $instance->setUserAgent((string) optional(request())->header('User-Agent'));
+
+        return $instance;
     }
 
-    public static function make(string $userAgent): self
+    public static function make(string $userAgent): static
     {
-        return (new static())->setUserAgent($userAgent);
+        $instance = new static();
+        $instance->setUserAgent($userAgent);
+
+        return $instance;
     }
 
     public function platformName(): string

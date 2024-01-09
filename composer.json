@@ -13,7 +13,7 @@
     "require": {
         "php": "^8.0",
         "illuminate/support": "^10.0",
-        "jenssegers/agent": "^2.6"
+        "mobiledetect/mobiledetectlib": "^4.8"
     },
     "autoload": {
         "psr-4": {

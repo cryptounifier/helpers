@@ -44,7 +44,7 @@ class CaptchaValidator
             'secret'            => $this->secretKey,
             'response'          => $token,
             'remoteip'          => $ipAddress,
-            'remoteip_leniency' => 'strict', // Un-documented beta feature
+            'remoteip_leniency' => config('app.debug') ? 'relaxed' : 'strict', // Un-documented beta feature
         ])->throw()->json();
 
         if (optional($captcha)->success !== true) {

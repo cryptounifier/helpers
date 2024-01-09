@@ -27,7 +27,7 @@ trait ExtraAgentFeatures
     public function platformName(): string
     {
         $platform = $this->platform();
-        $version = $this->version($platform);
+        $version = $this->version($platform ?? '');
 
         return trim("{$platform} ".(($version) ?: __('Unknown')));
     }
@@ -35,7 +35,7 @@ trait ExtraAgentFeatures
     public function browserName(): string
     {
         $browser = $this->browser();
-        $version = $this->version($browser);
+        $version = $this->version($browser ?? '');
 
         return trim("{$browser} ".(($version) ?: __('Unknown')));
     }

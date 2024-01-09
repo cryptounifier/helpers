@@ -27,7 +27,7 @@ trait ExtraAgentFeatures
     public function platformName(): string
     {
         $platform = $this->platform();
-        $version = $this->getVersion($platform);
+        $version = $this->version($platform);
 
         return trim("{$platform} ".(($version) ?: __('Unknown')));
     }
@@ -35,7 +35,7 @@ trait ExtraAgentFeatures
     public function browserName(): string
     {
         $browser = $this->browser();
-        $version = $this->getVersion($browser);
+        $version = $this->version($browser);
 
         return trim("{$browser} ".(($version) ?: __('Unknown')));
     }
@@ -51,13 +51,5 @@ trait ExtraAgentFeatures
         }
 
         return self::DEVICE_TYPE_DESKTOP;
-    }
-
-    /**
-     * @deprecated Waiting for https://github.com/serbanghita/Mobile-Detect/issues/940.
-     */
-    protected function getVersion(string $string): string|false
-    {
-        return false;
     }
 }

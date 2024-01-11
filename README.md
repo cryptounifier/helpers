@@ -15,6 +15,20 @@ composer require cryptounifier/helpers
 - Adds an Agent class helper (On top of [MobileDetect](https://github.com/serbanghita/Mobile-Detect)).
 
 
+## Env Variables
+
+```sh
+CAPTCHA_ON_AUTH=false
+CAPTCHA_DRIVER=
+CAPTCHA_SITE_KEY=
+CAPTCHA_SECRET_KEY=
+
+IP_ADDRESS_ON_AUTH=false
+IP_ADDRESS_DRIVER=
+IP_ADDRESS_DRIVER_KEY=
+IP_ADDRESS_CACHE_DURATION=1440 # Minutes
+```
+
 # License
 
 Crypto Unifier Helpers is open-sourced software licensed under the [MIT license](LICENSE).

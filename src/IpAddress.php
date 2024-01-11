@@ -72,7 +72,7 @@ class IpAddress extends Model
         $result = self::whereKey($id)->first($columns);
 
         if ($result) {
-            if ($result->updated_at < now()->subSeconds($config['data_duration'])) {
+            if ($result->updated_at < now()->subMinutes($config['cache_duration'])) {
                 return self::updateOrCreateIpAddress($id);
             }
 

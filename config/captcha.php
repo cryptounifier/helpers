@@ -19,7 +19,7 @@ return [
     | Captcha driver service name.
     |
     */
-    'driver' => env('CAPTCHA_DRIVER', 'hcaptcha'),
+    'driver' => env('CAPTCHA_DRIVER'),
 
     /*
     |--------------------------------------------------------------------------

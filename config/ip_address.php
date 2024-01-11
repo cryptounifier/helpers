@@ -19,7 +19,7 @@ return [
     | IPInfo driver service name.
     |
     */
-    'driver' => env('IP_ADDRESS_DRIVER', 'proxycheck'),
+    'driver' => env('IP_ADDRESS_DRIVER'),
 
     /*
     |--------------------------------------------------------------------------
@@ -33,11 +33,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | IpAddress Data Duration Time
+    | IpAddress Cache Duration
     |--------------------------------------------------------------------------
     |
-    | IPInfo data duration until it get revalidated (in seconds).
+    | IPInfo cache duration until it get re-validated (in minutes).
     |
     */
-    'data_duration' => 60 * 60 * 24 * 7,
+    'cache_duration' => env('IP_ADDRESS_CACHE_DURATION', 60 * 24),
 ];

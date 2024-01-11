@@ -24,28 +24,26 @@ class CaptchaValidator
     /**
      * Validate captcha token response.
      */
-    public function validate(string $token, string $ipAddress, ?string $action = null): bool
+    public function validate(string $token, ?string $action = null, array $extraParams = []): bool
     {
         return match ($this->driver) {
-            'hcaptcha' => $this->validateHcaptcha($token),
-            'recaptcha' => $this->validateReCaptcha($token),
-            'geetest' => $this->validateGeeTest($token),
-            'turnstile' => $this->validateTurnstile($token, $ipAddress, $action),
-            default => false,
+            'turnstile' => $this->validateTurnstile($token, $action, $extraParams),
+            'hcaptcha'  => $this->validateHcaptcha($token, $extraParams),
+            'recaptcha' => $this->validateReCaptcha($token, $extraParams),
+            'geetest'   => $this->validateGeeTest($token),
+            default     => false,
         };
     }
 
     /**
      * Validate using Turnstile driver.
      */
-    protected function validateTurnstile(string $token, string $ipAddress, ?string $action): bool
+    protected function validateTurnstile(string $token, ?string $action, array $extraParams): bool
     {
-        $captcha = (object) Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
-            'secret'            => $this->secretKey,
-            'response'          => $token,
-            'remoteip'          => $ipAddress,
-            'remoteip_leniency' => config('app.debug') ? 'relaxed' : 'strict', // Un-documented beta feature
-        ])->throw()->json();
+        $captcha = (object) Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', array_merge($extraParams, [
+            'secret'   => $this->secretKey,
+            'response' => $token,
+        ]))->throw()->json();
 
         if (optional($captcha)->success !== true) {
             return false;
@@ -61,12 +59,12 @@ class CaptchaValidator
     /**
      * Validate using hCaptcha driver.
      */
-    protected function validateHCaptcha(string $token): bool
+    protected function validateHCaptcha(string $token, array $extraParams): bool
     {
-        $captcha = (object) Http::asForm()->post('https://hcaptcha.com/siteverify', [
+        $captcha = (object) Http::asForm()->post('https://hcaptcha.com/siteverify', array_merge($extraParams, [
             'secret'   => $this->secretKey,
             'response' => $token,
-        ])->throw()->json();
+        ]))->throw()->json();
 
         return optional($captcha)->success === true;
     }
@@ -74,12 +72,12 @@ class CaptchaValidator
     /**
      * Validate using reCaptcha driver.
      */
-    protected function validateReCaptcha(string $token): bool
+    protected function validateReCaptcha(string $token, array $extraParams): bool
     {
-        $captcha = (object) Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        $captcha = (object) Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', array_merge($extraParams, [
             'secret'   => $this->secretKey,
             'response' => $token,
-        ])->throw()->json();
+        ]))->throw()->json();
 
         return optional($captcha)->success === true;
     }

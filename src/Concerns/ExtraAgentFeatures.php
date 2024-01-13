@@ -42,12 +42,12 @@ trait ExtraAgentFeatures
 
     public function deviceType(): int
     {
-        if ($this->isMobile()) {
-            return self::DEVICE_TYPE_MOBILE;
+        if ($this->isTablet()) { // Must verify tablet before mobile (Not 100% confirmed)
+            return self::DEVICE_TYPE_TABLET;
         }
 
-        if ($this->isTablet()) {
-            return self::DEVICE_TYPE_TABLET;
+        if ($this->isMobile()) {
+            return self::DEVICE_TYPE_MOBILE;
         }
 
         return self::DEVICE_TYPE_DESKTOP;

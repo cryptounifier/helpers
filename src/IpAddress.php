@@ -54,6 +54,15 @@ class IpAddress extends Model
     ];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'proxy' => 'boolean',
+    ];
+
+    /**
      * Create a new element.
      *
      * @param mixed $id
@@ -145,7 +154,7 @@ class IpAddress extends Model
 
         return [
             'ip_address' => $ip,
-            'asn' => $response['asn'] ?? 'Unknown',
+            'asn' => (int) str_replace('AS', '', $response['asn'] ?? '-1'),
             'continent' => $response['continent'],
             'country' => $response['country'] ?? 'Unknown',
             'country_code' => $response['isocode'] ?? 'XX',
@@ -155,7 +164,7 @@ class IpAddress extends Model
             'latitude' => $response['latitude'] ?? 0,
             'longitude' => $response['longitude'] ?? 0,
             'risk' => (int) ($response['risk'] ?? '100'),
-            'proxy' => ($response['proxy'] === 'yes') ? 1 : 0,
+            'proxy' => $response['proxy'] === 'yes',
             'driver' => 'proxycheck',
         ];
     }
@@ -172,7 +181,7 @@ class IpAddress extends Model
         }
 
         $isProxy = false;
-        foreach ($response['security'] as $type => $value) {
+        foreach ($response['security'] as $value) {
             if ($value) {
                 $isProxy = true;
                 break;
@@ -181,7 +190,7 @@ class IpAddress extends Model
 
         return [
             'ip_address' => $ip,
-            'asn' => 'AS' . ((string) $response['connection']['asn']),
+            'asn' => $response['connection']['asn'],
             'continent' => $response['location']['continent']['continent'],
             'country' => $response['location']['country']['name'],
             'country_code' => $response['location']['country']['code'],
@@ -191,7 +200,7 @@ class IpAddress extends Model
             'latitude' => $response['location']['latitude'],
             'longitude' => $response['location']['longitude'],
             'risk' => ($isProxy) ? 100 : 0,
-            'proxy' => (int) $isProxy,
+            'proxy' => $isProxy,
             'driver' => 'ipregistry',
         ];
     }

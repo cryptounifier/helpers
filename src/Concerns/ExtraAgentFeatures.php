@@ -24,20 +24,12 @@ trait ExtraAgentFeatures
         return $instance;
     }
 
-    public function platformName(): string
-    {
-        $platform = $this->platform();
-        $version = $this->version($platform ?? '');
-
-        return trim("{$platform} ".(($version) ?: __('Unknown')));
-    }
-
-    public function browserName(): string
+    public function browserFull(): string
     {
         $browser = $this->browser();
         $version = $this->version($browser ?? '');
 
-        return trim("{$browser} ".(($version) ?: __('Unknown')));
+        return trim("{$browser} {$version}");
     }
 
     public function deviceType(): int

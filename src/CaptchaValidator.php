@@ -31,7 +31,7 @@ class CaptchaValidator
             'hcaptcha'  => $this->validateHcaptcha($token, $extraParams),
             'recaptcha' => $this->validateReCaptcha($token, $extraParams),
             'geetest'   => $this->validateGeeTest($token),
-            default     => ['success' => false, 'extra' => null],
+            default     => ['success' => false, 'extra' => []],
         };
     }
 
@@ -48,20 +48,24 @@ class CaptchaValidator
         if ($captcha?->success !== true) {
             return [
                 'success' => false, 
-                'extra'   => null
+                'extra'   => []
             ];
         }
 
         if ($action !== null && $captcha?->action !== $action) {
             return [
                 'success' => false, 
-                'extra'   => "{$captcha?->action}.{$action}"
+                'extra'   => [
+                    'response_action' => $captcha?->action,
+                ]
             ];
         }
 
         return [
             'success' => true, 
-            'extra'   => $captcha?->cdata
+            'extra'   => [
+                'cdata' => $captcha?->cdata
+            ]
         ];
     }
 
@@ -77,7 +81,7 @@ class CaptchaValidator
 
         return [
             'success' => $captcha?->success === true, 
-            'extra'   => null
+            'extra'   => []
         ];
     }
 
@@ -93,7 +97,7 @@ class CaptchaValidator
 
         return [
             'success' => $captcha?->success === true, 
-            'extra'   => null
+            'extra'   => []
         ];
     }
 
@@ -121,7 +125,7 @@ class CaptchaValidator
 
         return [
             'success' => $captcha?->result === 'success', 
-            'extra'   => null
+            'extra'   => []
         ];
     }
 }

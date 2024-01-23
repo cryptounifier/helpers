@@ -52,11 +52,11 @@ class CaptchaValidator
             ];
         }
 
-        if ($action !== null && $captcha?->action !== $action) {
+        if ($action !== null && isset($captcha->action) && $captcha->action !== $action) {
             return [
                 'success' => false, 
                 'extra'   => [
-                    'response_action' => $captcha?->action,
+                    'response_action' => $captcha->action,
                 ]
             ];
         }

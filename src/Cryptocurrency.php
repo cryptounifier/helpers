@@ -95,7 +95,7 @@ abstract class Cryptocurrency extends NonDatabaseModel
     /**
      * Get price attribute.
      */
-    final public function getPriceAttribute(): float
+    final public function getPriceAttribute(): float|int
     {
         return $this->coingecko->current_price[$this->currency] ?? 0;
     }
@@ -103,7 +103,7 @@ abstract class Cryptocurrency extends NonDatabaseModel
     /**
      * Get market cap attribute.
      */
-    final public function getMarketCapAttribute(): float
+    final public function getMarketCapAttribute(): float|int
     {
         return $this->coingecko->market_cap[$this->currency] ?? 0;
     }
@@ -111,7 +111,7 @@ abstract class Cryptocurrency extends NonDatabaseModel
     /**
      * Get percentage 30 days variation attribute.
      */
-    final public function getPercentage30dVariationAttribute(): float
+    final public function getPercentage30dVariationAttribute(): float|int
     {
         return $this->coingecko->price_change_percentage_30d ?? 0;
     }

@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -64,6 +65,14 @@ class IpAddress extends Model
     protected $casts = [
         'proxy' => 'boolean',
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return IpAddressFactory::new();
+    }
 
     /**
      * Create a new element.

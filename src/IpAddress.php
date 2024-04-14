@@ -6,11 +6,14 @@ use InvalidArgumentException;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
 
 class IpAddress extends Model
 {
+    use HasFactory;
+
     /**
      * The primary key associated with the table.
      *

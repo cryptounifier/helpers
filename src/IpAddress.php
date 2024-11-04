@@ -53,7 +53,7 @@ class IpAddress extends Model
         'latitude',
         'longitude',
         'risk',
-        'proxy',
+        'block',
         'driver',
     ];
 
@@ -63,7 +63,7 @@ class IpAddress extends Model
      * @var array
      */
     protected $casts = [
-        'proxy' => 'boolean',
+        'block' => 'boolean',
     ];
 
     /**
@@ -176,7 +176,7 @@ class IpAddress extends Model
             'latitude' => $response['latitude'] ?? 0,
             'longitude' => $response['longitude'] ?? 0,
             'risk' => (int) ($response['risk'] ?? '100'),
-            'proxy' => $response['proxy'] === 'yes',
+            'block' => $response['proxy'] === 'yes',
             'driver' => 'proxycheck',
         ];
     }
@@ -192,10 +192,10 @@ class IpAddress extends Model
             return null;
         }
 
-        $isProxy = false;
+        $isBlock = false;
         foreach ($response['security'] as $value) {
             if ($value) {
-                $isProxy = true;
+                $isBlock = true;
                 break;
             }
         }
@@ -211,8 +211,8 @@ class IpAddress extends Model
             'city' => $response['location']['city'],
             'latitude' => $response['location']['latitude'],
             'longitude' => $response['location']['longitude'],
-            'risk' => ($isProxy) ? 100 : 0,
-            'proxy' => $isProxy,
+            'risk' => ($isBlock) ? 100 : 0,
+            'block' => $isBlock,
             'driver' => 'ipregistry',
         ];
     }

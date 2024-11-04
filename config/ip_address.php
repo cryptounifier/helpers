@@ -6,7 +6,7 @@ return [
     | IpAddress On Authentication
     |--------------------------------------------------------------------------
     |
-    | The proxy verification should be enabled on authentication routes? (Used by Jetstream Plus)
+    | The "block" verification should be enabled on authentication routes? (Used by Jetstream Plus)
     |
     */
     'on_auth' => env('IP_ADDRESS_ON_AUTH', false),

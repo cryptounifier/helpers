@@ -32,7 +32,7 @@ class IpAddressFactory extends Factory
             'latitude'     => $this->faker->latitude(),
             'longitude'    => $this->faker->longitude(),
             'risk'         => $this->faker->randomNumber(2),
-            'proxy'        => $this->faker->boolean(),
+            'block'        => $this->faker->boolean(),
             'driver'       => 'factory',
         ];
     }

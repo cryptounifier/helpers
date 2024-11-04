@@ -23,7 +23,7 @@ class CreateIpAddressesTable extends Migration
             $table->decimal('latitude', 11, 8);
             $table->decimal('longitude', 11, 8);
             $table->tinyInteger('risk');
-            $table->boolean('proxy');
+            $table->boolean('block');
             $table->string('driver');
             $table->timestamps();
         });

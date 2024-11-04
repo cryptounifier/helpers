@@ -135,6 +135,8 @@ class IpAddress extends Model
                 $result = self::proxyCheckRequest($ipAddress, $config);
             } elseif ($config['driver'] === 'ipregistry') {
                 $result = self::ipRegistryRequest($ipAddress, $config);
+            } elseif ($config['driver'] === 'ipqualityscore') {
+                $result = self::ipQualityScoreRequest($ipAddress, $config);
             } else {
                 throw new InvalidArgumentException("Driver [{$config['driver']}] is not supported.");
             }
@@ -214,6 +216,48 @@ class IpAddress extends Model
             'risk' => ($isBlock) ? 100 : 0,
             'block' => $isBlock,
             'driver' => 'ipregistry',
+        ];
+    }
+
+    /**
+     * Make request to ipQualityScore service.
+     */
+    protected static function ipQualityScoreRequest(string $ip, array $config): ?array
+    {
+        $response = Http::timeout(5)->get("https://www.ipqualityscore.com/api/json/ip/{$config['key']}/{$ip}")->json();
+
+        if (! isset($response['success']) || $response['success'] !== true) {
+            return null;
+        }
+
+        $isBlock = false;
+        if ($response['is_crawler']) {
+            $isBlock = true;
+        }
+        if ($response['proxy'] || $response['vpn'] || $response['tor']) {
+            $isBlock = true;
+        }
+        if ($response['active_vpn'] || $response['active_tor'] || $response['recent_abuse']) {
+            $isBlock = true;
+        }
+        if ($response['bot_status'] || $response['fraud_score'] >= 75) {
+            $isBlock = true;
+        }
+
+        return [
+            'ip_address' => $ip,
+            'asn' => $response['asn'],
+            'continent' => 'Unknown',
+            'country' => locale_get_display_region("-{$response['country_code']}", 'en'),
+            'country_code' => $response['country_code'],
+            'region' => $response['region'],
+            'region_code' => 'XX',
+            'city' => $response['city'],
+            'latitude' => $response['latitude'],
+            'longitude' => $response['longitude'],
+            'risk' => $response['fraud_score'],
+            'block' => $isBlock,
+            'driver' => 'ipqualityscore',
         ];
     }
 }

@@ -94,13 +94,13 @@ class IpAddress extends Model
 
         if ($result) {
             if ($result->updated_at < now()->subMinutes($config['cache_duration'])) {
-                return self::updateOrCreateIpAddress($id);
+                return self::updateOrCreateIpAddress($id) ?? $result;
             }
 
             return $result;
         }
 
-        return self::updateOrCreateIpAddress($id);
+        return self::updateOrCreateIpAddress($id) ?? new self(['ip_address' => $id]);
     }
 
     /**

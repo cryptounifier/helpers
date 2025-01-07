@@ -145,7 +145,7 @@ class IpAddress extends Model
         }
 
         if (! $result) {
-            return new self(['ip_address' => $ipAddress]);
+            return null;
         }
 
         // Ensure that it will not try to create with an existing row
